@@ -20,13 +20,15 @@ const emailData = {
 
 const sendEmail = async (data, type) => {
   console.log('start send Email')
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: emailData.user,
-      pass: emailData.pass,
-    },
-  });
+ const transporter = nodemailer.createTransport({
+   host: "smtp.gmail.com",
+   port: 465, // use 465 with secure true
+   secure: true,
+   auth: {
+     user: emailData.user,
+     pass: emailData.pass, // must be an App Password, not your Gmail login
+   },
+ });
   let htmlContent = "<div>";
   for (const [key, value] of Object.entries(data)) {
     htmlContent += `<p>${key}: ${
@@ -76,13 +78,15 @@ const sendEmail = async (data, type) => {
 app.get("/", (req, res) => res.sendStatus(200));
 app.post("/email", async (req, res) => {
   if (req.query.type === "one") {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: emailData.user,
-        pass: emailData.pass,
-      },
-    });
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465, // use 465 with secure true
+    secure: true,
+    auth: {
+      user: emailData.user,
+      pass: emailData.pass, // must be an App Password, not your Gmail login
+    },
+  });
     let htmlContent = "<div>";
     for (const [key, value] of Object.entries(req.body)) {
       htmlContent += `<p>${key}: ${
