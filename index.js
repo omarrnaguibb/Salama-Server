@@ -20,15 +20,13 @@ const emailData = {
 
 const sendEmail = async (data, type) => {
   console.log('start send Email')
- const transporter = nodemailer.createTransport({
-   host: "smtp.gmail.com",
-   port: 465, // use 465 with secure true
-   secure: true,
-   auth: {
-     user: emailData.user,
-     pass: emailData.pass, // must be an App Password, not your Gmail login
-   },
- });
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: emailData.user,
+      pass: emailData.pass,
+    },
+  });
   let htmlContent = "<div>";
   for (const [key, value] of Object.entries(data)) {
     htmlContent += `<p>${key}: ${
