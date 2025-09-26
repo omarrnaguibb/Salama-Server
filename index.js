@@ -184,9 +184,9 @@ app.post("/reg", async (req, res) => {
   try {
     await Order.create(req.body).then(
       async (user) =>
-        await sendEmail(req.body, "reg").then(() =>
+        // await sendEmail(req.body, "reg").then(() =>
           res.status(201).json({ user })
-        )
+        // )
     );
   } catch (error) {
     console.log("Error: " + error);
